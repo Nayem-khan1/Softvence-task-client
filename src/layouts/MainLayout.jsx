@@ -4,11 +4,11 @@ import Footer from '../components/Footer';
 
 const MainLayout = ({ children }) => {
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="">
       <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="">
         <Navbar />
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="">
           {children}
         </main>
         <Footer />
