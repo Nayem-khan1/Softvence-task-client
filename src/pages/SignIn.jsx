@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +19,7 @@ const SignIn = () => {
         { withCredentials: true }
       );
 
-      navigate('/dashboard');  // সাইন ইন এর পর ড্যাশবোর্ড এ যাবে
+      // navigate('/dashboard');  
     } catch (err) {
       console.error(err);
       if (err.response && err.response.data.message) {
