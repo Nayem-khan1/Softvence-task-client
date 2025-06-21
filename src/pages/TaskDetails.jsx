@@ -87,11 +87,13 @@ const TaskDetails = () => {
         <nav className="w-full container mx-auto flex justify-between items-center px-4 py-8">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <img
-              src={logo}
-              alt="Logo"
-              className="h-8 sm:h-full object-contain"
-            />
+            <Link to="/">
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-8 sm:h-full object-contain"
+              />
+            </Link>
           </div>
 
           {/* Nav Links */}

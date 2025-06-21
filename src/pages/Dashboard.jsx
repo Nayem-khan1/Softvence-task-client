@@ -5,8 +5,9 @@ import { User, FilePlus, ChevronDown, LogOut, Mail } from "lucide-react";
 import { logo, noTask, spinIcon, taskIcon } from "../assets/assets";
 import { useAuth } from "../context/AuthContext";
 import Modal from "../components/Modal";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import TaskCard from "../components/TaskCard";
+import Loader from "../components/Loader";
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -61,11 +62,13 @@ const Dashboard = () => {
         <nav className="w-full container mx-auto flex justify-between items-center px-4 py-8">
           {/* Logo */}
           <div className="flex-shrink-0">
+            <Link to="/">
             <img
               src={logo}
               alt="Logo"
               className="h-8 sm:h-full object-contain"
             />
+            </Link>
           </div>
 
           {/* Nav Links */}
@@ -133,8 +136,8 @@ const Dashboard = () => {
           </h1>
         </div>
       </div>
-      <div className=" min-h-screen container mx-auto px-4 bg-white rounded-2xl shadow-lg -mt-15">
-        <div className="flex justify-between items-center px-4 py-4">
+      <div className="min-h-[80vh] container mx-auto px-4 bg-white rounded-2xl shadow-lg -mt-15">
+        <div className="flex justify-between items-center px-4 py-8">
           <p className="text-2xl font-semibold">All Task List</p>
           <div className="flex items-center gap-2">
             <div className="grid grid-cols-1">
@@ -185,16 +188,18 @@ const Dashboard = () => {
             </button>
           </div>
         </div>
-        {filteredTasks.length > 0 ? (
+        {loading ? (
+          <Loader />
+        ) : filteredTasks.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 py-6">
             {filteredTasks.map((task, idx) => (
               <TaskCard key={idx} task={task} fetchTasks={fetchTasks} />
             ))}
           </div>
         ) : (
-          <div className="flex flex-col justify-center items-center py-24">
+          <div className="flex flex-col justify-center items-center py-20">
             <img src={noTask} />
-            <h3 className="mt-10">
+            <h3 className="mt-10 text-2xl font-semibold">
               No Task is Available yet, Please Add your New Task
             </h3>
           </div>
