@@ -7,6 +7,7 @@ import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import MainLayout from "./layouts/MainLayout";
 import PublicRoute from "./routes/PublicRoute";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -38,6 +39,10 @@ function App() {
                 </MainLayout>
               </PrivateRoute>
             }
+          />
+          <Route
+           path="*"
+           element={<NotFound/>}
           />
         </Routes>
       </BrowserRouter>
