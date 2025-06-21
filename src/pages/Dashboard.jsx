@@ -1,15 +1,8 @@
 import { useEffect, useState } from "react";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import axios from "axios";
-import {
-  User,
-  FilePlus,
-  ChevronDown,
-  LogOut,
-  Mail,
-} from "lucide-react";
+import { User, FilePlus, ChevronDown, LogOut, Mail } from "lucide-react";
 import { logo, noTask, spinIcon, taskIcon } from "../assets/assets";
-import Container from "../components/Container";
 import { useAuth } from "../context/AuthContext";
 import Modal from "../components/Modal";
 import { useNavigate } from "react-router";
@@ -20,6 +13,8 @@ const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
+  const [categoryFilter, setCategoryFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
@@ -47,7 +42,13 @@ const Dashboard = () => {
     navigate("/signin");
   };
 
-  console.log(user);
+  const filteredTasks = tasks.filter((task) => {
+    const categoryMatch =
+      categoryFilter === "All" || task.category === categoryFilter;
+    const statusMatch = statusFilter === "All" || task.status === statusFilter;
+    return categoryMatch && statusMatch;
+  });
+
   return (
     <div>
       <div
@@ -138,17 +139,18 @@ const Dashboard = () => {
           <div className="flex items-center gap-2">
             <div className="grid grid-cols-1">
               <select
-                id="location"
-                name="location"
-                defaultValue="Select Task Category"
+                id="category"
+                name="category"
+                defaultValue="All"
+                onChange={(e) => setCategoryFilter(e.target.value)}
                 className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6"
               >
-                <option>Select Task Category</option>
-                <option>Nature</option>
-                <option>Family</option>
-                <option>Sport</option>
-                <option>Friends</option>
-                <option>Meditation</option>
+                <option value="All">Select Task Category</option>
+                <option value="Nature">Nature</option>
+                <option value="Family">Family</option>
+                <option value="Sport">Sport</option>
+                <option value="Friends">Friends</option>
+                <option value="Meditation">Meditation</option>
               </select>
               <ChevronDown
                 aria-hidden="true"
@@ -159,14 +161,15 @@ const Dashboard = () => {
               <select
                 id="status"
                 name="status"
-                defaultValue="All Task"
+                defaultValue="All"
+                onChange={(e) => setStatusFilter(e.target.value)}
                 className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6"
               >
-                <option>All Task</option>
-                <option>Ongoing</option>
-                <option>Pending</option>
-                <option>Collaborative Task</option>
-                <option>Done</option>
+                <option value="All">All Task</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Pending">Pending</option>
+                <option value="Collaborative Task">Collaborative Task</option>
+                <option value="Done">Done</option>
               </select>
               <ChevronDown
                 aria-hidden="true"
@@ -182,9 +185,9 @@ const Dashboard = () => {
             </button>
           </div>
         </div>
-        {tasks.length > 0 ? (
+        {filteredTasks.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 py-6">
-            {tasks.map((task, idx) => (
+            {filteredTasks.map((task, idx) => (
               <TaskCard key={idx} task={task} fetchTasks={fetchTasks} />
             ))}
           </div>
