@@ -6,5 +6,7 @@ import header2 from "./header2.png";
 import logo from './logo.png'
 import taskIcon from './taskIcon.png';
 import spinIcon from './spinIcon.png';
+import noTask from './noTask.png'
+import paperPlus from './PaperPlus.png'
 
-export { notFound, header1, logInImg, signInImg, header2, logo, taskIcon, spinIcon };
+export { notFound, header1, logInImg, signInImg, header2, logo, taskIcon, spinIcon, noTask, paperPlus };

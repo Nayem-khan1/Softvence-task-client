@@ -11,7 +11,6 @@ const MainLayout = ({ children }) => {
         <main className="">
           {children}
         </main>
-        <Footer />
       </div>
     </div>
   );
