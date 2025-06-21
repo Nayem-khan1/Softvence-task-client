@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router";
 import axios from "axios";
-import { CalendarClock, ArrowLeft, Edit3Icon } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import {
   logo,
@@ -13,14 +12,10 @@ import {
   getStatusStyle,
 } from "../assets/assets";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import {
-  User,
-  ChevronDown,
-  LogOut,
-  Mail,
-} from "lucide-react";
+import { User, ChevronDown, LogOut, Mail } from "lucide-react";
 import Modal from "../components/Modal";
 import DeleteTask from "../components/DeleteTask";
+import SuccessModal from "../components/SuccessModal";
 
 const TaskDetails = () => {
   const { id } = useParams();
@@ -30,6 +25,7 @@ const TaskDetails = () => {
   const [openModal, setOpenModal] = useState(false);
   const [task, setTask] = useState(null);
   const [open, setOpen] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const navigate = useNavigate();
 
@@ -56,6 +52,23 @@ const TaskDetails = () => {
   const handleLogout = async () => {
     await logout();
     navigate("/signin");
+  };
+
+  const handleStatusChange = async (newStatus) => {
+    try {
+      const res = await axios.put(
+        `${backendURL}/api/tasks/${task._id}`,
+        { ...task, status: newStatus },
+        { withCredentials: true }
+      );
+      setTask(res.data);
+
+      if (newStatus === "Done") {
+        setSuccess(true);
+      }
+    } catch (err) {
+      console.error("Status update failed:", err);
+    }
   };
 
   if (loading) return <div className="p-8">Loading...</div>;
@@ -145,7 +158,12 @@ const TaskDetails = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setOpenModal(true)}
-              className="bg-yellow-100 text-amber-600 px-4 sm:px-6 py-2 rounded-md flex items-center gap-2 font-semibold cursor-pointer"
+              disabled={task.status === "Done"}
+              className={`px-4 sm:px-6 py-2 rounded-md flex items-center gap-2 font-semibold ${
+                task.status === "Done"
+                  ? "bg-gray-300 cursor-not-allowed text-gray-500"
+                  : "bg-yellow-100 text-amber-600"
+              }`}
             >
               <img className="w-4 h-4" src={edit} alt="" />
               Edit Task
@@ -205,7 +223,8 @@ const TaskDetails = () => {
                   <select
                     id="status"
                     name="status"
-                    defaultValue="All Task"
+                    defaultValue={task.status}
+                    onChange={(e) => handleStatusChange(e.target.value)}
                     className="col-start-1 row-start-1 appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6"
                   >
                     <option>All Task</option>
@@ -225,7 +244,10 @@ const TaskDetails = () => {
         </div>
         <div className="absolute bottom-12 right-8">
           <div className="flex items-center gap-2">
-            <button onClick={() => setOpen(true)} className="bg-red-100 text-red-600 px-4 sm:px-6 py-2 rounded-md flex items-center gap-2 font-semibold cursor-pointer">
+            <button
+              onClick={() => setOpen(true)}
+              className="bg-red-100 text-red-600 px-4 sm:px-6 py-2 rounded-md flex items-center gap-2 font-semibold cursor-pointer"
+            >
               Delete Task
             </button>
             <button className="bg-primary px-6 sm:px-8 py-2 rounded-md flex items-center gap-2 font-semibold cursor-pointer">
@@ -234,8 +256,15 @@ const TaskDetails = () => {
           </div>
         </div>
       </div>
-      {<Modal open={openModal} setOpen={setOpenModal} />}
+      <Modal
+        open={openModal}
+        setOpen={setOpenModal}
+        fetchTasks={() => window.location.reload()}
+        mode="edit"
+        initialData={task}
+      />
       {<DeleteTask open={open} setOpen={setOpen} id={task._id} />}
+      {<SuccessModal open={success} setOpen={setSuccess} />}
     </div>
   );
 };

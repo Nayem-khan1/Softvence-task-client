@@ -6,48 +6,75 @@ import {
 } from "@headlessui/react";
 import { ChevronDown } from "lucide-react";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const Modal = ({ open, setOpen, fetchTasks }) => {
-  const [form, setForm] = useState({
-    title: "",
-    description: "",
-    endDate: "",
-    category: "",
-  });
+const Modal = ({
+  open,
+  setOpen,
+  fetchTasks,
+  mode = "add",
+  initialData = {},
+}) => {
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [category, setCategory] = useState("");
 
   const [loading, setLoading] = useState(false);
 
-  const backendURL = import.meta.env.VITE_BACKEND_URL;
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  useEffect(() => {
+    if (mode === "edit" && initialData) {
+      setTitle(initialData.title || "");
+      setDescription(initialData.description || "");
+      setEndDate(initialData.endDate ? initialData.endDate.slice(0, 10) : "");
+      setCategory(initialData.category || "");
+    }
+  }, [initialData, mode]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
+    const taskData = {
+      title,
+      description,
+      endDate,
+      category,
+    };
 
     try {
-      await axios.post(`${backendURL}/api/tasks`, form, {
-        withCredentials: true,
-      });
+      if (mode === "edit") {
+        setLoading(true);
+        await axios.put(
+          `${backendURL}/api/tasks/${initialData._id}`,
+          taskData,
+          {
+            withCredentials: true,
+          }
+        );
+        setLoading(false);
+      } else {
+        setLoading(true);
+        await axios.post(`${backendURL}/api/tasks`, taskData, {
+          withCredentials: true,
+        });
+        setTitle("");
+        setDescription("");
+        setEndDate("");
+        setCategory("");
 
-      // Clear form and close modal
-      setForm({
-        title: "",
-        description: "",
-        endDate: "",
-        category: "",
-      });
+        setLoading(false);
+      }
+
+      if (fetchTasks) fetchTasks();
       setOpen(false);
-      fetchTasks(); // Refresh task list from backend
     } catch (err) {
-      console.error("Failed to save task:", err);
-    } finally {
-      setLoading(false);
+      console.error("Error submitting task:", err);
     }
   };
+
+  if (!open) return null;
 
   return (
     <div>
@@ -56,7 +83,7 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel className="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl transition-all">
             <DialogTitle className="text-lg font-bold text-gray-800 mb-4 text-center">
-              Add New Task
+              {mode === "edit" ? "Edit Task" : "Add New Task"}
             </DialogTitle>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -68,8 +95,8 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
                 <input
                   type="text"
                   name="title"
-                  value={form.title}
-                  onChange={handleChange}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g., Finish assignment"
                   required
                   className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
@@ -83,8 +110,8 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
                 </label>
                 <textarea
                   name="description"
-                  value={form.description}
-                  onChange={handleChange}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   placeholder="Write a few sentences..."
                   rows={3}
                   required
@@ -101,8 +128,8 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
                   <input
                     type="date"
                     name="endDate"
-                    value={form.endDate}
-                    onChange={handleChange}
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
                     required
                     className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
                   />
@@ -114,8 +141,8 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
                   </label>
                   <select
                     name="category"
-                    value={form.category}
-                    onChange={handleChange}
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
                     required
                     className="w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:ring-2 focus:ring-primary"
                   >

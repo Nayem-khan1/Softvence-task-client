@@ -3,16 +3,17 @@ import header1 from "./header1.png";
 import logInImg from "./loginImg.png";
 import signInImg from "./signupImg.png";
 import header2 from "./header2.png";
-import logo from './logo.png'
-import taskIcon from './taskIcon.png';
-import spinIcon from './spinIcon.png';
-import noTask from './noTask.png'
-import paperPlus from './PaperPlus.png';
-import taskCardIcon from './Task.png';
-import calendarEdit from './calendar-edit.png';
-import edit from './edit-2.svg';
-import taskDetailsIcon from './taskDetailsIcon.png'
-import deletePopup from './deletePopup.png';
+import logo from "./logo.png";
+import taskIcon from "./taskIcon.png";
+import spinIcon from "./spinIcon.png";
+import noTask from "./noTask.png";
+import paperPlus from "./PaperPlus.png";
+import taskCardIcon from "./Task.png";
+import calendarEdit from "./calendar-edit.png";
+import edit from "./edit-2.svg";
+import taskDetailsIcon from "./taskDetailsIcon.png";
+import deletePopup from "./deletePopup.png";
+import success from "./success.png";
 
 const getStatusStyle = (status) => {
   switch (status) {
@@ -41,4 +42,22 @@ const getStatusStyle = (status) => {
   }
 };
 
-export { notFound, header1, logInImg, signInImg, header2, logo, taskIcon, spinIcon, noTask, paperPlus, taskCardIcon, calendarEdit, edit,  taskDetailsIcon, getStatusStyle, deletePopup };
+export {
+  notFound,
+  header1,
+  logInImg,
+  signInImg,
+  header2,
+  logo,
+  taskIcon,
+  spinIcon,
+  noTask,
+  paperPlus,
+  taskCardIcon,
+  calendarEdit,
+  edit,
+  taskDetailsIcon,
+  getStatusStyle,
+  deletePopup,
+  success,
+};

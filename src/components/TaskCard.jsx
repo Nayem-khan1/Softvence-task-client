@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { CalendarClock, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { calendarEdit, getStatusStyle, taskCardIcon } from "../assets/assets";
 import { Link } from "react-router";
 import DeleteTask from "./DeleteTask";

@@ -2,14 +2,9 @@ import { useEffect, useState } from "react";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import axios from "axios";
 import {
-  CheckCircle,
-  Pencil,
-  Trash2,
-  PlusCircle,
   User,
   FilePlus,
   ChevronDown,
-  ArrowRight,
   LogOut,
   Mail,
 } from "lucide-react";
@@ -23,8 +18,6 @@ import TaskCard from "../components/TaskCard";
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const [tasks, setTasks] = useState([]);
-  const [form, setForm] = useState({ title: "", description: "" });
-  const [editingTask, setEditingTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
 
@@ -48,57 +41,6 @@ const Dashboard = () => {
   useEffect(() => {
     fetchTasks();
   }, []);
-
-  // Handle Create or Update
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (editingTask) {
-        await axios.put(`${backendURL}/api/tasks/${editingTask._id}`, form, {
-          withCredentials: true,
-        });
-      } else {
-        await axios.post(`${backendURL}/api/tasks`, form, {
-          withCredentials: true,
-        });
-      }
-      setForm({ title: "", description: "" });
-      setEditingTask(null);
-      fetchTasks();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // Delete task
-  const handleDelete = async (id) => {
-    if (!confirm("Are you sure?")) return;
-    try {
-      await axios.delete(`${backendURL}/api/tasks/${id}`, {
-        withCredentials: true,
-      });
-      fetchTasks();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // Toggle complete
-  const toggleComplete = async (task) => {
-    try {
-      await axios.put(
-        `${backendURL}/api/tasks/${task._id}`,
-        {
-          ...task,
-          completed: !task.completed,
-        },
-        { withCredentials: true }
-      );
-      fetchTasks();
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const handleLogout = async () => {
     await logout();
@@ -260,6 +202,7 @@ const Dashboard = () => {
           open={openModal}
           setOpen={setOpenModal}
           fetchTasks={fetchTasks}
+          mode="add"
         />
       }
     </div>
