@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import axios from "axios";
 import {
   CheckCircle,
@@ -8,20 +9,26 @@ import {
   User,
   FilePlus,
   ChevronDown,
+  ArrowRight,
+  LogOut,
+  Mail,
 } from "lucide-react";
 import { logo, noTask, spinIcon, taskIcon } from "../assets/assets";
 import Container from "../components/Container";
 import { useAuth } from "../context/AuthContext";
+import Modal from "../components/Modal";
+import { useNavigate } from "react-router";
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [form, setForm] = useState({ title: "", description: "" });
   const [editingTask, setEditingTask] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
-
+  const navigate = useNavigate();
   // Fetch tasks
   const fetchTasks = async () => {
     setLoading(true);
@@ -91,6 +98,12 @@ const Dashboard = () => {
       console.error(err);
     }
   };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/signin");
+  };
+
   console.log(user);
   return (
     <div>
@@ -132,12 +145,40 @@ const Dashboard = () => {
           </ul>
 
           {/* User */}
-          <div className="flex items-center gap-2">
-            <User className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
-            <span className="text-sm sm:text-base text-white">
-              {user ? user.name : "User"}
-            </span>
-          </div>
+
+          {/* User Profile */}
+          <Popover className="relative">
+            <PopoverButton className="outline-none cursor-pointer">
+              <div className="flex items-center gap-2">
+                <User className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
+                <span className="text-sm sm:text-base text-white">
+                  {user ? user.name : "User"}
+                </span>
+              </div>
+            </PopoverButton>
+            <PopoverPanel className="absolute right-0 z-10 w-56 sm:w-64 bg-white border border-gray-300 rounded-lg shadow-lg p-4">
+              <div className="text-sm">
+                <div className="flex items-center space-x-2">
+                  <User className="text-gray-600 w-6" />
+                  <p className="text-gray-700">{user?.name}</p>
+                </div>
+                <div className="flex items-center space-x-2 mt-2 ml-0.5">
+                  <Mail className="text-gray-600 w-5" />
+                  <p className="text-gray-700">{user?.email}</p>
+                </div>
+
+                <hr className="my-3 text-gray-300" />
+
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-3 px-3 py-2 w-full text-left text-red-600 hover:bg-red-50 rounded-md transition cursor-pointer"
+                >
+                  <LogOut size={20} />
+                  <span>Logout</span>
+                </button>
+              </div>
+            </PopoverPanel>
+          </Popover>
         </nav>
         <div className="container mx-auto px-4">
           <h2 className="text-primary text-lg sm:text-xl md:text-2xl font-semibold">
@@ -160,8 +201,11 @@ const Dashboard = () => {
                 className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6"
               >
                 <option>Select Task Category</option>
-                <option>Canada</option>
-                <option>Mexico</option>
+                <option>Nature</option>
+                <option>Family</option>
+                <option>Sport</option>
+                <option>Friends</option>
+                <option>Meditation</option>
               </select>
               <ChevronDown
                 aria-hidden="true"
@@ -176,15 +220,20 @@ const Dashboard = () => {
                 className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6"
               >
                 <option>All Task</option>
-                <option>Canada</option>
-                <option>Mexico</option>
+                <option>Ongoing</option>
+                <option>Pending</option>
+                <option>Collaborative Task</option>
+                <option>Done</option>
               </select>
               <ChevronDown
                 aria-hidden="true"
                 className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
               />
             </div>
-            <button className="bg-primary px-4 sm:px-6 py-2 rounded-md flex items-center gap-2 font-semibold">
+            <button
+              onClick={() => setOpenModal(true)}
+              className="bg-primary px-4 sm:px-6 py-2 rounded-md flex items-center gap-2 font-semibold cursor-pointer"
+            >
               <FilePlus className="w-4 h-4" />
               Add New Task
             </button>
@@ -195,6 +244,7 @@ const Dashboard = () => {
           <h3>No Task is Available yet, Please Add your New Task</h3>
         </div>
       </div>
+      {<Modal open={openModal} setOpen={setOpenModal} />}
     </div>
   );
 };
