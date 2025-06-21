@@ -5,9 +5,9 @@ import Footer from '../components/Footer';
 const MainLayout = ({ children }) => {
   return (
     <div className="">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="">
-        <Navbar />
+        {/* <Navbar /> */}
         <main className="">
           {children}
         </main>
