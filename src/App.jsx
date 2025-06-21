@@ -8,7 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import MainLayout from "./layouts/MainLayout";
 import PublicRoute from "./routes/PublicRoute";
 import NotFound from "./pages/NotFound";
-import TaskDetails from "./components/TaskDetails";
+import TaskDetails from "./pages/TaskDetails";
 
 function App() {
   return (

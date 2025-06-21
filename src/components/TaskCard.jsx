@@ -1,35 +1,9 @@
 import React from "react";
 import axios from "axios";
 import { CalendarClock, Trash2 } from "lucide-react";
-import { calendarEdit, taskCardIcon } from "../assets/assets";
+import { calendarEdit, getStatusStyle, taskCardIcon } from "../assets/assets";
 import { Link } from "react-router";
 
-const getStatusStyle = (status) => {
-  switch (status) {
-    case "Ongoing":
-      return {
-        bg: "bg-orange-100",
-        text: "text-orange-600",
-        dot: "bg-orange-500",
-      };
-    case "Pending":
-      return { bg: "bg-pink-100", text: "text-pink-600", dot: "bg-pink-500" };
-    case "Done":
-      return {
-        bg: "bg-green-100",
-        text: "text-green-600",
-        dot: "bg-green-500",
-      };
-    case "Collaborative Task":
-      return {
-        bg: "bg-indigo-100",
-        text: "text-indigo-600",
-        dot: "bg-indigo-500",
-      };
-    default:
-      return { bg: "bg-gray-100", text: "text-gray-600", dot: "bg-gray-400" };
-  }
-};
 
 const TaskCard = ({ task, fetchTasks }) => {
   const backendURL = import.meta.env.VITE_BACKEND_URL;

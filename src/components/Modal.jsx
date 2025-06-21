@@ -142,7 +142,7 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition"
+                  className="rounded-md bg-primary px-4 py-2 text-sm font-semibold hover:bg-primary/90 transition cursor-pointer"
                 >
                   {loading ? "Saving..." : "Save Task"}
                 </button>
