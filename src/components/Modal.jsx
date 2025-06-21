@@ -51,13 +51,6 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
 
   return (
     <div>
-      <button
-        onClick={() => setOpen(true)}
-        className="rounded-md bg-gray-900/5 px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-900/10"
-      >
-        Add Task
-      </button>
-
       <Dialog open={open} onClose={setOpen} className="relative z-50">
         <DialogBackdrop className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
         <div className="fixed inset-0 flex items-center justify-center p-4">

@@ -18,6 +18,7 @@ import Container from "../components/Container";
 import { useAuth } from "../context/AuthContext";
 import Modal from "../components/Modal";
 import { useNavigate } from "react-router";
+import TaskCard from "../components/TaskCard";
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -189,7 +190,7 @@ const Dashboard = () => {
           </h1>
         </div>
       </div>
-      <div className="container mx-auto px-4 bg-white rounded-2xl shadow-lg -mt-15">
+      <div className=" min-h-screen container mx-auto px-4 bg-white rounded-2xl shadow-lg -mt-15">
         <div className="flex justify-between items-center px-4 py-4">
           <p className="text-2xl font-semibold">All Task List</p>
           <div className="flex items-center gap-2">
@@ -239,12 +240,28 @@ const Dashboard = () => {
             </button>
           </div>
         </div>
-        <div className="flex flex-col justify-center items-center py-24">
-          <img src={noTask} />
-          <h3 className="mt-10">No Task is Available yet, Please Add your New Task</h3>
-        </div>
+        {tasks.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 py-6">
+            {tasks.map((task, idx) => (
+              <TaskCard key={idx} task={task} fetchTasks={fetchTasks} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col justify-center items-center py-24">
+            <img src={noTask} />
+            <h3 className="mt-10">
+              No Task is Available yet, Please Add your New Task
+            </h3>
+          </div>
+        )}
       </div>
-      {<Modal open={openModal} setOpen={setOpenModal} fetchTasks={fetchTasks} />}
+      {
+        <Modal
+          open={openModal}
+          setOpen={setOpenModal}
+          fetchTasks={fetchTasks}
+        />
+      }
     </div>
   );
 };

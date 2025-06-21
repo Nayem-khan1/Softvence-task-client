@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import MainLayout from "./layouts/MainLayout";
 import PublicRoute from "./routes/PublicRoute";
 import NotFound from "./pages/NotFound";
+import TaskDetails from "./components/TaskDetails";
 
 function App() {
   return (
@@ -36,6 +37,16 @@ function App() {
               <PrivateRoute>
                 <MainLayout>
                   <Dashboard />
+                </MainLayout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/tasks/:id"
+            element={
+              <PrivateRoute>
+                <MainLayout>
+                  <TaskDetails/>
                 </MainLayout>
               </PrivateRoute>
             }

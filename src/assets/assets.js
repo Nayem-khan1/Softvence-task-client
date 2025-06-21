@@ -7,6 +7,8 @@ import logo from './logo.png'
 import taskIcon from './taskIcon.png';
 import spinIcon from './spinIcon.png';
 import noTask from './noTask.png'
-import paperPlus from './PaperPlus.png'
+import paperPlus from './PaperPlus.png';
+import taskCardIcon from './Task.png';
+import calendarEdit from './calendar-edit.png';
 
-export { notFound, header1, logInImg, signInImg, header2, logo, taskIcon, spinIcon, noTask, paperPlus };
+export { notFound, header1, logInImg, signInImg, header2, logo, taskIcon, spinIcon, noTask, paperPlus, taskCardIcon, calendarEdit };
