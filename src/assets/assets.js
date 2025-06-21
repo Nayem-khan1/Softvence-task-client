@@ -12,6 +12,7 @@ import taskCardIcon from './Task.png';
 import calendarEdit from './calendar-edit.png';
 import edit from './edit-2.svg';
 import taskDetailsIcon from './taskDetailsIcon.png'
+import deletePopup from './deletePopup.png';
 
 const getStatusStyle = (status) => {
   switch (status) {
@@ -40,4 +41,4 @@ const getStatusStyle = (status) => {
   }
 };
 
-export { notFound, header1, logInImg, signInImg, header2, logo, taskIcon, spinIcon, noTask, paperPlus, taskCardIcon, calendarEdit, edit,  taskDetailsIcon, getStatusStyle };
+export { notFound, header1, logInImg, signInImg, header2, logo, taskIcon, spinIcon, noTask, paperPlus, taskCardIcon, calendarEdit, edit,  taskDetailsIcon, getStatusStyle, deletePopup };

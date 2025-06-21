@@ -14,18 +14,13 @@ import {
 } from "../assets/assets";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import {
-  CheckCircle,
-  Pencil,
-  Trash2,
-  PlusCircle,
   User,
-  FilePlus,
   ChevronDown,
-  ArrowRight,
   LogOut,
   Mail,
 } from "lucide-react";
 import Modal from "../components/Modal";
+import DeleteTask from "../components/DeleteTask";
 
 const TaskDetails = () => {
   const { id } = useParams();
@@ -34,6 +29,7 @@ const TaskDetails = () => {
   const { user, logout } = useAuth();
   const [openModal, setOpenModal] = useState(false);
   const [task, setTask] = useState(null);
+  const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -229,7 +225,7 @@ const TaskDetails = () => {
         </div>
         <div className="absolute bottom-12 right-8">
           <div className="flex items-center gap-2">
-            <button className="bg-red-100 text-red-600 px-4 sm:px-6 py-2 rounded-md flex items-center gap-2 font-semibold cursor-pointer">
+            <button onClick={() => setOpen(true)} className="bg-red-100 text-red-600 px-4 sm:px-6 py-2 rounded-md flex items-center gap-2 font-semibold cursor-pointer">
               Delete Task
             </button>
             <button className="bg-primary px-6 sm:px-8 py-2 rounded-md flex items-center gap-2 font-semibold cursor-pointer">
@@ -239,6 +235,7 @@ const TaskDetails = () => {
         </div>
       </div>
       {<Modal open={openModal} setOpen={setOpenModal} />}
+      {<DeleteTask open={open} setOpen={setOpen} id={task._id} />}
     </div>
   );
 };
