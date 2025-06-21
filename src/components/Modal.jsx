@@ -5,8 +5,31 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { ChevronDown } from "lucide-react";
+import axios from "axios";
+import { useState } from "react";
 
-const Modal = ({ open, setOpen }) => {
+const Modal = ({ open, setOpen, fetchTasks }) => {
+  const [form, setForm] = useState({ title: "", description: "" });
+  const [loading, setLoading] = useState(true);
+
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(`${backendURL}/api/tasks`, form, {
+        withCredentials: true,
+      });
+      setForm({ title: "", description: "" });
+      fetchTasks();
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <div>
       <button
@@ -25,7 +48,7 @@ const Modal = ({ open, setOpen }) => {
               Add New Task
             </DialogTitle>
 
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* Title Input */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -33,7 +56,10 @@ const Modal = ({ open, setOpen }) => {
                 </label>
                 <input
                   type="text"
+                  value={form.title}
+                  onChange={handleChange}
                   placeholder="e.g., Finish assignment"
+                  required
                   className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
@@ -46,6 +72,9 @@ const Modal = ({ open, setOpen }) => {
                 <textarea
                   rows={3}
                   placeholder="Write a few sentences about your task..."
+                  value={form.description}
+                  onChange={handleChange}
+                  required
                   className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
@@ -58,6 +87,10 @@ const Modal = ({ open, setOpen }) => {
                   </label>
                   <input
                     type="date"
+                    name="endDate"
+                    value={form.endDate}
+                    onChange={handleChange}
+                    required
                     className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
@@ -66,7 +99,7 @@ const Modal = ({ open, setOpen }) => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Task Category
                   </label>
-                  <select className="w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:ring-2 focus:ring-primary">
+                  <select value={form.category} onChange={handleChange} required className="w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:ring-2 focus:ring-primary">
                     <option value="">Select Category</option>
                     <option value="Nature">Nature</option>
                     <option value="Family">Family</option>
@@ -89,9 +122,10 @@ const Modal = ({ open, setOpen }) => {
                 </button>
                 <button
                   type="submit"
-                  className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition cursor-pointer"
+                  disabled={loading}
+                  className="rounded-md bg-primary px-4 py-2 text-sm font-semibold hover:bg-primary/90 transition cursor-pointer"
                 >
-                  Save Task
+                  {loading ? "Saving..." : "Save Task"}
                 </button>
               </div>
             </form>

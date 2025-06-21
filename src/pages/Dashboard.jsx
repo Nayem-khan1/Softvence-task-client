@@ -244,7 +244,7 @@ const Dashboard = () => {
           <h3>No Task is Available yet, Please Add your New Task</h3>
         </div>
       </div>
-      {<Modal open={openModal} setOpen={setOpenModal} />}
+      {<Modal open={openModal} setOpen={setOpenModal} fetchTasks={fetchTasks} />}
     </div>
   );
 };
