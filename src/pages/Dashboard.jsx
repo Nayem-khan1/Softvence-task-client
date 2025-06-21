@@ -214,8 +214,8 @@ const Dashboard = () => {
             </div>
             <div className=" grid grid-cols-1">
               <select
-                id="location"
-                name="location"
+                id="status"
+                name="status"
                 defaultValue="All Task"
                 className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6"
               >
@@ -241,7 +241,7 @@ const Dashboard = () => {
         </div>
         <div className="flex flex-col justify-center items-center py-24">
           <img src={noTask} />
-          <h3>No Task is Available yet, Please Add your New Task</h3>
+          <h3 className="mt-10">No Task is Available yet, Please Add your New Task</h3>
         </div>
       </div>
       {<Modal open={openModal} setOpen={setOpenModal} fetchTasks={fetchTasks} />}

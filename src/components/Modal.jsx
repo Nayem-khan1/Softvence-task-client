@@ -9,8 +9,14 @@ import axios from "axios";
 import { useState } from "react";
 
 const Modal = ({ open, setOpen, fetchTasks }) => {
-  const [form, setForm] = useState({ title: "", description: "" });
-  const [loading, setLoading] = useState(true);
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    endDate: "",
+    category: "",
+  });
+
+  const [loading, setLoading] = useState(false);
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -20,16 +26,29 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
       await axios.post(`${backendURL}/api/tasks`, form, {
         withCredentials: true,
       });
-      setForm({ title: "", description: "" });
-      fetchTasks();
+
+      // Clear form and close modal
+      setForm({
+        title: "",
+        description: "",
+        endDate: "",
+        category: "",
+      });
+      setOpen(false);
+      fetchTasks(); // Refresh task list from backend
     } catch (err) {
-      console.error(err);
+      console.error("Failed to save task:", err);
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <div>
       <button
@@ -41,7 +60,6 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
 
       <Dialog open={open} onClose={setOpen} className="relative z-50">
         <DialogBackdrop className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
-
         <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel className="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl transition-all">
             <DialogTitle className="text-lg font-bold text-gray-800 mb-4 text-center">
@@ -49,13 +67,14 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
             </DialogTitle>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Title Input */}
+              {/* Title */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Task Title
                 </label>
                 <input
                   type="text"
+                  name="title"
                   value={form.title}
                   onChange={handleChange}
                   placeholder="e.g., Finish assignment"
@@ -70,10 +89,11 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
                   Description
                 </label>
                 <textarea
-                  rows={3}
-                  placeholder="Write a few sentences about your task..."
+                  name="description"
                   value={form.description}
                   onChange={handleChange}
+                  placeholder="Write a few sentences..."
+                  rows={3}
                   required
                   className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
                 />
@@ -99,7 +119,13 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Task Category
                   </label>
-                  <select value={form.category} onChange={handleChange} required className="w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:ring-2 focus:ring-primary">
+                  <select
+                    name="category"
+                    value={form.category}
+                    onChange={handleChange}
+                    required
+                    className="w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:ring-2 focus:ring-primary"
+                  >
                     <option value="">Select Category</option>
                     <option value="Nature">Nature</option>
                     <option value="Family">Family</option>
@@ -111,7 +137,7 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
                 </div>
               </div>
 
-              {/* Actions */}
+              {/* Buttons */}
               <div className="flex justify-end gap-4 pt-4">
                 <button
                   type="button"
@@ -123,7 +149,7 @@ const Modal = ({ open, setOpen, fetchTasks }) => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="rounded-md bg-primary px-4 py-2 text-sm font-semibold hover:bg-primary/90 transition cursor-pointer"
+                  className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition"
                 >
                   {loading ? "Saving..." : "Save Task"}
                 </button>
