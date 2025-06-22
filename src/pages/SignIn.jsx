@@ -3,13 +3,15 @@ import axios from "axios";
 import loginImg from "../assets/loginImg.png";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
+import { Eye, EyeOff } from "lucide-react";
 
 const SignIn = () => {
-  const {fetchUser} = useAuth();
+  const { fetchUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -24,8 +26,8 @@ const SignIn = () => {
         { email, password },
         { withCredentials: true }
       );
-      
-      await fetchUser(); 
+
+      await fetchUser();
 
       navigate("/");
     } catch (err) {
@@ -50,7 +52,7 @@ const SignIn = () => {
         />
       </div>
       <div className="w-full lg:w-1/2 flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div className="mx-auto w-full">
+        <div className="w-full max-w-md mx-auto">
           <div className="text-center">
             <h2 className="mt-8 text-[40px] font-bold tracking-tight text-gray-900">
               Login
@@ -97,18 +99,25 @@ const SignIn = () => {
                   >
                     Password
                   </label>
-                  <div className="mt-2">
+                  <div className="mt-2 relative">
                     <input
                       id="password"
                       name="password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       autoComplete="current-password"
                       placeholder="*********"
-                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6"
+                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6 pr-10"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute top-2 right-2 text-gray-500"
+                    >
+                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
                   </div>
                 </div>
 
@@ -153,7 +162,10 @@ const SignIn = () => {
                   </div>
 
                   <div className=" ">
-                    <Link to="/reset-password" className="text-sm text-gray-500">
+                    <Link
+                      to="/reset-password"
+                      className="text-sm text-gray-500"
+                    >
                       Forgot password?
                     </Link>
                   </div>

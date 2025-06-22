@@ -3,9 +3,10 @@ import axios from "axios";
 import signUpImg from "../assets/signupImg.png";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
+import { Eye, EyeOff } from "lucide-react";
 
 const SignUp = () => {
-  const {fetchUser} = useAuth();
+  const { fetchUser } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,6 +14,11 @@ const SignUp = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    confirmPassword: false,
+  });
 
   const navigate = useNavigate();
 
@@ -34,7 +40,7 @@ const SignUp = () => {
         { withCredentials: true }
       );
       await fetchUser();
-      navigate("/")
+      navigate("/");
     } catch (err) {
       console.error(err);
       if (err.response && err.response.data.message) {
@@ -57,7 +63,7 @@ const SignUp = () => {
         />
       </div>
       <div className="w-full lg:w-1/2 flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-        <div className="mx-auto w-full">
+        <div className=" w-full max-w-md mx-auto">
           <div className="text-center">
             <h2 className="mt-8 text-[40px] font-bold tracking-tight text-gray-900">
               Sign Up
@@ -125,11 +131,11 @@ const SignUp = () => {
                   >
                     Password
                   </label>
-                  <div className="mt-2">
+                  <div className="mt-2 relative">
                     <input
                       id="password"
                       name="password"
-                      type="password"
+                      type={showPassword.password ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
@@ -137,6 +143,22 @@ const SignUp = () => {
                       placeholder="*********"
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6"
                     />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowPassword((prev) => ({
+                          ...prev,
+                          password: !prev.password,
+                        }))
+                      }
+                      className="absolute right-3 top-2 text-gray-500"
+                    >
+                      {showPassword.password ? (
+                        <EyeOff size={18} />
+                      ) : (
+                        <Eye size={18} />
+                      )}
+                    </button>
                   </div>
                 </div>
                 <div>
@@ -146,11 +168,11 @@ const SignUp = () => {
                   >
                     Confirm Password
                   </label>
-                  <div className="mt-2">
+                  <div className="mt-2 relative">
                     <input
                       id="confirm-password"
                       name="confirm-password"
-                      type="password"
+                      type={showPassword.confirmPassword ? "text" : "password"}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
@@ -158,6 +180,22 @@ const SignUp = () => {
                       placeholder="*********"
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6"
                     />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowPassword((prev) => ({
+                          ...prev,
+                          confirmPassword: !prev.confirmPassword,
+                        }))
+                      }
+                      className="absolute right-3 top-2 text-gray-500"
+                    >
+                      {showPassword.confirmPassword ? (
+                        <EyeOff size={18} />
+                      ) : (
+                        <Eye size={18} />
+                      )}
+                    </button>
                   </div>
                 </div>
 
