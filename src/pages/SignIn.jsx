@@ -153,7 +153,7 @@ const SignIn = () => {
                   </div>
 
                   <div className=" ">
-                    <Link href="#" className="text-sm text-gray-500">
+                    <Link to="/reset-password" className="text-sm text-gray-500">
                       Forgot password?
                     </Link>
                   </div>

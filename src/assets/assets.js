@@ -14,6 +14,7 @@ import edit from "./edit-2.svg";
 import taskDetailsIcon from "./taskDetailsIcon.png";
 import deletePopup from "./deletePopup.png";
 import success from "./success.png";
+import resetLogo from './resetLogo.png';
 
 const getStatusStyle = (status) => {
   switch (status) {
@@ -60,4 +61,5 @@ export {
   getStatusStyle,
   deletePopup,
   success,
+  resetLogo,
 };

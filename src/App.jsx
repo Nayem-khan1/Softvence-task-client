@@ -9,6 +9,7 @@ import MainLayout from "./layouts/MainLayout";
 import PublicRoute from "./routes/PublicRoute";
 import NotFound from "./pages/NotFound";
 import TaskDetails from "./pages/TaskDetails";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -28,6 +29,14 @@ function App() {
             element={
               <PublicRoute>
                 <SignUp />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <PublicRoute>
+                <ResetPassword />
               </PublicRoute>
             }
           />
