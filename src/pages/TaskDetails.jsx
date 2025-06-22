@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router";
+import { useParams, Link } from "react-router";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext";
 import {
-  logo,
-  spinIcon,
-  taskIcon,
   edit,
   taskDetailsIcon,
   calendarEdit,
@@ -16,18 +12,16 @@ import { User, ChevronDown, LogOut, Mail } from "lucide-react";
 import Modal from "../components/Modal";
 import DeleteTask from "../components/DeleteTask";
 import SuccessModal from "../components/SuccessModal";
+import Nav from "../components/Nav";
 
 const TaskDetails = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const { user, logout } = useAuth();
   const [openModal, setOpenModal] = useState(false);
   const [task, setTask] = useState(null);
   const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  const navigate = useNavigate();
 
   const backendURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -48,11 +42,6 @@ const TaskDetails = () => {
 
     fetchTask();
   }, [id]);
-
-  const handleLogout = async () => {
-    await logout();
-    navigate("/signin");
-  };
 
   const handleStatusChange = async (newStatus) => {
     try {
@@ -75,6 +64,7 @@ const TaskDetails = () => {
   if (error) return <div className="p-8 text-red-500">{error}</div>;
 
   const statusStyle = getStatusStyle(task.status);
+
   return (
     <div>
       <div
@@ -84,84 +74,19 @@ const TaskDetails = () => {
           height: "170px",
         }}
       >
-        <nav className="w-full container mx-auto flex justify-between items-center px-4 py-8">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link to="/">
-              <img
-                src={logo}
-                alt="Logo"
-                className="h-8 sm:h-full object-contain"
-              />
-            </Link>
-          </div>
-
-          {/* Nav Links */}
-          <ul className="flex gap-6 md:gap-10 text-white font-medium">
-            <li className="flex items-center gap-2">
-              <img
-                src={taskIcon}
-                alt="Task"
-                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-              />
-              <span className="text-sm sm:text-base">Task List</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <img
-                src={spinIcon}
-                alt="Spin"
-                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-              />
-              <span className="text-sm sm:text-base ">Spin</span>
-            </li>
-          </ul>
-
-          {/* User */}
-
-          {/* User Profile */}
-          <Popover className="relative">
-            <PopoverButton className="outline-none cursor-pointer">
-              <div className="flex items-center gap-2">
-                <User className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" />
-                <span className="text-sm sm:text-base text-white">
-                  {user ? user.name : "User"}
-                </span>
-              </div>
-            </PopoverButton>
-            <PopoverPanel className="absolute right-0 z-10 w-56 sm:w-64 bg-white border border-gray-300 rounded-lg shadow-lg p-4">
-              <div className="text-sm">
-                <div className="flex items-center space-x-2">
-                  <User className="text-gray-600 w-6" />
-                  <p className="text-gray-700">{user?.name}</p>
-                </div>
-                <div className="flex items-center space-x-2 mt-2 ml-0.5">
-                  <Mail className="text-gray-600 w-5" />
-                  <p className="text-gray-700">{user?.email}</p>
-                </div>
-
-                <hr className="my-3 text-gray-300" />
-
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-3 px-3 py-2 w-full text-left text-red-600 hover:bg-red-50 rounded-md transition cursor-pointer"
-                >
-                  <LogOut size={20} />
-                  <span>Logout</span>
-                </button>
-              </div>
-            </PopoverPanel>
-          </Popover>
-        </nav>
+        <div className="py-4">
+          <Nav/>
+        </div>
       </div>
       <div className=" min-h-[80vh] container mx-auto px-4 bg-white rounded-2xl shadow-lg -mt-15 relative">
-        <div className="flex justify-between items-center px-4 py-4">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center px-4 py-8 gap-4 sm:gap-0">
           <p className="text-2xl font-semibold">Task Details</p>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-2 w-full sm:w-auto">
             <button
               onClick={() => setOpenModal(true)}
               disabled={task.status === "Done"}
-              className={`px-4 sm:px-6 py-2 rounded-md flex items-center gap-2 font-semibold ${
+              className={`px-4 sm:px-6 py-2 rounded-md flex items-center gap-2 font-semibold text-center ${
                 task.status === "Done"
                   ? "bg-gray-300 cursor-not-allowed text-gray-500"
                   : "bg-yellow-100 text-amber-600"
@@ -172,7 +97,7 @@ const TaskDetails = () => {
             </button>
             <Link
               to="/"
-              className="bg-primary px-6 sm:px-8 py-2 rounded-md flex items-center gap-2 font-semibold cursor-pointer"
+              className="bg-primary px-6 sm:px-8 py-2 rounded-md flex items-center gap-2 font-semibold cursor-pointer text-center"
             >
               Back
             </Link>
