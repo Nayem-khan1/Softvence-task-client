@@ -75,10 +75,10 @@ const TaskDetails = () => {
         }}
       >
         <div className="py-4">
-          <Nav/>
+          <Nav />
         </div>
       </div>
-      <div className=" min-h-[80vh] container mx-auto px-4 bg-white rounded-2xl shadow-lg -mt-15 relative">
+      <div className=" min-h-[85vh] container mx-auto px-4 bg-white rounded-2xl shadow-lg -mt-15 relative">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center px-4 py-8 gap-4 sm:gap-0">
           <p className="text-2xl font-semibold">Task Details</p>
 
@@ -105,7 +105,7 @@ const TaskDetails = () => {
         </div>
         <hr className="text-gray-300" />
         <div className="mt-10 px-4">
-          <div className="flex gap-6">
+          <div className="flex flex-col md:flex-row gap-6">
             <img src={taskDetailsIcon} className="w-16 h-16" alt="task icon" />
             <div className="">
               <h3 className="text-2xl font-semibold text-gray-800">
@@ -144,7 +144,7 @@ const TaskDetails = () => {
                 </div>
               </div>
 
-              <div className="mt-10 max-w-[300px]">
+              <div className="mt-10 w-full max-w-[300px]">
                 <label className="">Change Status</label>
                 <div className="mt-3 grid grid-cols-1">
                   <select
@@ -168,7 +168,7 @@ const TaskDetails = () => {
             </div>
           </div>
         </div>
-        <div className="absolute bottom-12 right-8">
+        <div className="absolute bottom-4 sm:bottom-8 right-4 flex flex-col sm:flex-row gap-3 sm:gap-2">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setOpen(true)}
