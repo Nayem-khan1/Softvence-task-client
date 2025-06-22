@@ -37,7 +37,13 @@ const Dashboard = () => {
   useEffect(() => {
     fetchTasks();
   }, []);
-
+  
+  useEffect(() => {
+    if (!loading) {
+      setCategoryFilter("All");
+      setStatusFilter("All");
+    }
+  }, [tasks]);
   const handleLogout = async () => {
     await logout();
     navigate("/signin");
@@ -63,11 +69,11 @@ const Dashboard = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/">
-            <img
-              src={logo}
-              alt="Logo"
-              className="h-8 sm:h-full object-contain"
-            />
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-8 sm:h-full object-contain"
+              />
             </Link>
           </div>
 
